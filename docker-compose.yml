@@ -1,0 +1,29 @@
+version: '3'
+services:
+  php-apache:
+    build:
+      context: ./
+      dockerfile: DevBox.Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./html:/var/www/html:z
+    environment:
+      PHP_IDE_CONFIG: serverName=PHPSERVERNAME
+    links:
+      - 'mariadb'
+
+  mariadb:
+    image: mariadb:10.5.5
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      TZ: "America/New York"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "rootpwd"
+      MYSQL_USER: 'testuser'
+      MYSQL_PASSWORD: 'testpassword'
+      MYSQL_DATABASE: 'testdb'
+
+volumes:
+  mariadb:
