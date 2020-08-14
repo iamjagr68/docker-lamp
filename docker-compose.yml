@@ -1,29 +1,41 @@
 version: '3'
+
 services:
   php-apache:
-    build:
-      context: ./
-      dockerfile: DevBox.Dockerfile
+    # looks for a `Dockerfile` in the current directory
+    build: .
     ports:
       - 80:80
     volumes:
-      - ./html:/var/www/html:z
+      # the `:cached` is a osx optimization option
+      # the `:z` is for selinux
+      - ./html:/var/www/html:cached
     environment:
+      # you can put "values" in your ENV or in a `.env` file and access them like `${VAR_NAME}`
+      XDEBUG_CONFIG: idekey=PHPSTORM remote_enable=1 remote_host=host.docker.internal
       PHP_IDE_CONFIG: serverName=PHPSERVERNAME
-    links:
-      - 'mariadb'
+    # links has been deprecated in favor of depends_on
+    # dependent services will be "started" (successful start is not guaranteed)
+    # service names act as domain names
+    depends_on:
+      - mariadb
 
   mariadb:
     image: mariadb:10.5.5
     volumes:
+      # the mariadb image defines a volume for /var/lib/mysql
+      # so when you start the container, it will create a volume
+      # this line mounts a named volume at /var/lib/mysql
+      # w/o this, it will still creat the volume, but it will be an anonymous volume
+      # you should always be aware of the volumes created by an image (docker inspect image:tag)
       - mariadb:/var/lib/mysql
     environment:
-      TZ: "America/New York"
+      TZ: America/New_York
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
-      MYSQL_ROOT_PASSWORD: "rootpwd"
-      MYSQL_USER: 'testuser'
-      MYSQL_PASSWORD: 'testpassword'
-      MYSQL_DATABASE: 'testdb'
+      MYSQL_ROOT_PASSWORD: rootpwd
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+      MYSQL_DATABASE: testdb
 
 volumes:
   mariadb:
