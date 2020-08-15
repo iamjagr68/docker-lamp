@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  php-apache:
+  webserver:
     # looks for a `Dockerfile` in the current directory
     build: .
     ports:
@@ -13,7 +13,6 @@ services:
     environment:
       # you can put "values" in your ENV or in a `.env` file and access them like `${VAR_NAME}`
       XDEBUG_CONFIG: idekey=PHPSTORM remote_enable=1 remote_host=host.docker.internal
-      PHP_IDE_CONFIG: serverName=PHPSERVERNAME
     # links has been deprecated in favor of depends_on
     # dependent services will be "started" (successful start is not guaranteed)
     # service names act as domain names
