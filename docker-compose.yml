@@ -18,19 +18,20 @@ services:
     # dependent services will be "started" (successful start is not guaranteed)
     # service names act as domain names
     depends_on:
-      - mariadb
+      - mysql
 
-  mariadb:
-    image: mariadb:10.5.5
+  mysql:
+    image: mysql:8.0.21
+    ports:
+      - 3306:3306
     volumes:
-      # the mariadb image defines a volume for /var/lib/mysql
+      # the mysql image defines a volume for /var/lib/mysql
       # so when you start the container, it will create a volume
       # this line mounts a named volume at /var/lib/mysql
-      # w/o this, it will still creat the volume, but it will be an anonymous volume
+      # w/o this, it will still create the volume, but it will be an anonymous volume
       # you should always be aware of the volumes created by an image (docker inspect image:tag)
-      - mariadb:/var/lib/mysql
+      - mysql:/var/lib/mysql
     environment:
-      TZ: America/New_York
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: rootpwd
       MYSQL_USER: testuser
@@ -38,4 +39,4 @@ services:
       MYSQL_DATABASE: testdb
 
 volumes:
-  mariadb:
+  mysql:

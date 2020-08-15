@@ -2,7 +2,7 @@
 /*
  * This is a friendly neighborhood reminder about permissions and bind mounts.
  *
- * The php:7.2-apache docker image runs as the `www-data` user by default.
+ * The php:7.4.9-apache docker image runs as the `www-data` user by default.
  * While you can override this through the use of ENV variables if need be,
  * you will still need to make sure your files can be read by the web user.
  *
